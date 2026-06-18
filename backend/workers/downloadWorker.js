@@ -52,6 +52,8 @@ export const downloadWorker = new Worker('downloadQueue', async job => {
       // Audio conversion using format_id as extension (e.g., 'mp3')
       args = [
         '--js-runtimes', 'node',
+        '-4',
+        '--extractor-args', 'youtube:player_client=android,web',
         '-f', 'bestaudio',
         '--extract-audio',
         '--audio-format', format_id, // usually 'mp3'
@@ -66,6 +68,8 @@ export const downloadWorker = new Worker('downloadQueue', async job => {
       const formatString = `${format_id}+bestaudio/best`;
       args = [
         '--js-runtimes', 'node',
+        '-4',
+        '--extractor-args', 'youtube:player_client=android,web',
         '-f', formatString, 
         '--ffmpeg-location', ffmpegPath,
         '--newline', 

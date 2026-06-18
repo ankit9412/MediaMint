@@ -15,7 +15,7 @@ const ytdlpPath = path.join(__dirname, '..', ytdlpExecutable);
 export const getMetaInfo = async (url) => {
   try {
     // using yt-dlp to get JSON dump
-    const { stdout } = await execPromise(`"${ytdlpPath}" --js-runtimes node -j "${url}"`);
+    const { stdout } = await execPromise(`"${ytdlpPath}" --js-runtimes node -4 --extractor-args "youtube:player_client=android,web" -j "${url}"`);
     const info = JSON.parse(stdout);
     
     const uniqueFormats = [];
