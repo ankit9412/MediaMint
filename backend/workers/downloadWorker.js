@@ -51,6 +51,7 @@ export const downloadWorker = new Worker('downloadQueue', async job => {
     if (type === 'audio') {
       // Audio conversion using format_id as extension (e.g., 'mp3')
       args = [
+        '--js-runtimes', 'node',
         '-f', 'bestaudio',
         '--extract-audio',
         '--audio-format', format_id, // usually 'mp3'
@@ -64,6 +65,7 @@ export const downloadWorker = new Worker('downloadQueue', async job => {
       // Video download
       const formatString = `${format_id}+bestaudio/best`;
       args = [
+        '--js-runtimes', 'node',
         '-f', formatString, 
         '--ffmpeg-location', ffmpegPath,
         '--newline', 
