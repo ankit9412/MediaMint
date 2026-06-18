@@ -53,7 +53,7 @@ export const downloadWorker = new Worker('downloadQueue', async job => {
       args = [
         '--js-runtimes', 'node',
         '-4',
-        '--extractor-args', 'youtube:player_client=android,web',
+        '--extractor-args', 'youtube:player_client=web_embedded,ios,android,tv',
         '-f', 'bestaudio',
         '--extract-audio',
         '--audio-format', format_id, // usually 'mp3'
@@ -69,7 +69,7 @@ export const downloadWorker = new Worker('downloadQueue', async job => {
       args = [
         '--js-runtimes', 'node',
         '-4',
-        '--extractor-args', 'youtube:player_client=android,web',
+        '--extractor-args', 'youtube:player_client=web_embedded,ios,android,tv',
         '-f', formatString, 
         '--ffmpeg-location', ffmpegPath,
         '--newline', 
