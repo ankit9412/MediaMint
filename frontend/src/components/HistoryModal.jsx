@@ -10,7 +10,7 @@ const HistoryModal = ({ onClose }) => {
     const fetchHistory = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:5000/api/download/history', {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/download/history`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setHistoryItems(res.data);
@@ -49,7 +49,7 @@ const HistoryModal = ({ onClose }) => {
                   </div>
                 </div>
                 <a 
-                  href={`http://localhost:5000/api/download/file/${item._id}`}
+                  href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/download/file/${item._id}`}
                   download
                   className="p-2 bg-primary/10 hover:bg-primary text-primary hover:text-[#0B0F19] rounded-lg transition-all"
                   title="Download File"

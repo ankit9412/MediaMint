@@ -68,7 +68,7 @@ const Home = () => {
         }));
         if (data.status === 'completed') {
            // Trigger file download in browser
-           const downloadUrl = `http://localhost:5000/api/download/file/${downloadId}`;
+           const downloadUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/download/file/${downloadId}`;
            const a = document.createElement('a');
            a.href = downloadUrl;
            a.download = '';
