@@ -1,5 +1,6 @@
 import { exec } from 'child_process';
 import util from 'util';
+import fs from 'fs';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -11,11 +12,13 @@ const execPromise = util.promisify(exec);
 const isWindows = process.platform === 'win32';
 const ytdlpExecutable = isWindows ? 'yt-dlp.exe' : 'yt-dlp';
 const ytdlpPath = path.join(__dirname, '..', ytdlpExecutable);
+const cookiesPath = path.join(__dirname, '..', 'cookies.txt');
 
 export const getMetaInfo = async (url) => {
   try {
     // using yt-dlp to get JSON dump
-    const { stdout } = await execPromise(`"${ytdlpPath}" --js-runtimes node -4 --extractor-args "youtube:player_client=web_embedded,ios,android,tv" -j "${url}"`);
+    const cookiesArg = fs.existsSync(cookiesPath) ? `--cookies "${cookiesPath}"` : '';
+    const { stdout } = await execPromise(`"${ytdlpPath}" ${cookiesArg} --js-runtimes node -4 --extractor-args "youtube:player_client=web_embedded,ios,android,tv" -j "${url}"`);
     const info = JSON.parse(stdout);
     
     const uniqueFormats = [];

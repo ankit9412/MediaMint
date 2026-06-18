@@ -77,6 +77,10 @@ export const downloadWorker = new Worker('downloadQueue', async job => {
         url
       ];
     }
+    const cookiesPath = path.join(__dirname, '..', 'cookies.txt');
+    if (fs.existsSync(cookiesPath)) {
+      args.unshift('--cookies', cookiesPath);
+    }
     
     const child = execFile(ytdlpPath, args);
 
