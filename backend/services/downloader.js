@@ -18,7 +18,6 @@ export const getMetaInfo = async (url) => {
     const { stdout } = await execPromise(`"${ytdlpPath}" -j "${url}"`);
     const info = JSON.parse(stdout);
     
-    const targetResolutions = [144, 240, 360, 480, 720, 1080];
     const uniqueFormats = [];
     const seenResolutions = new Set();
 
@@ -28,21 +27,26 @@ export const getMetaInfo = async (url) => {
       .map(f => {
         // Calculate standard 'p' value (smaller dimension)
         const resValue = Math.min(f.width || 9999, f.height || 9999);
-        return { ...f, resValue };
+        let resLabel = `${resValue}p`;
+        if (f.format_note && f.format_note.match(/^\d+p$/)) {
+          resLabel = f.format_note;
+        }
+        return { ...f, resValue, resLabel };
       })
-      .sort((a, b) => (b.tbr || 0) - (a.tbr || 0)); // Sort by bitrate descending to get best quality per resolution
+      .sort((a, b) => {
+        if (b.resValue !== a.resValue) return b.resValue - a.resValue;
+        return (b.tbr || 0) - (a.tbr || 0); // Sort by bitrate descending to get best quality per resolution
+      });
 
-    targetResolutions.forEach(target => {
-       // Find the format that closely matches this target
-       const match = videoFormats.find(f => f.resValue === target || (f.format_note && f.format_note.includes(`${target}p`)));
-       if (match && !seenResolutions.has(target)) {
+    videoFormats.forEach(match => {
+       if (!seenResolutions.has(match.resLabel) && match.resValue !== 9999) {
           uniqueFormats.push({
             format_id: match.format_id,
             ext: 'mp4',
-            resolution: `${target}p`,
+            resolution: match.resLabel,
             filesize: match.filesize || match.filesize_approx,
           });
-          seenResolutions.add(target);
+          seenResolutions.add(match.resLabel);
        }
     });
 
